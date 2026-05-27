@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <meta name="theme-color" content="#170C2C"/>
+  <meta name="description" content="ML Intern — Upload CSV files and let AI build, train, and evaluate machine learning models for you."/>
+  <title>ML Intern — AI Pipeline Agent</title>
+  <link rel="stylesheet" href="/app/style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+<div id="app" class="app">
+
+  <!-- BG -->
+  <div class="app-bg">
+    <img src="/app/background.jpg" alt="" class="app-bg__img"/>
+    <div class="app-bg__overlay"></div>
+  </div>
+
+  <!-- Main App Menu Button (Fixed Top Left) -->
+  <button id="btn-menu" class="btn-menu nebula-glass">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="#F0F0F0" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <!-- ========== SIDEBAR ========== -->
+  <aside id="sidebar" class="sidebar">
+    <!-- Logo + Brand -->
+    <div class="sidebar__logo">
+      <div class="sidebar__logo-icon">🤖</div>
+      <span class="sidebar__brand">ML Intern</span>
+    </div>
+
+    <!-- New Session -->
+    <div class="sidebar__new-chat-wrap">
+      <button id="btn-new-session" class="btn-new-chat nebula-gradient">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 4v16m8-8H4" stroke="#F0F0F0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>New Session</span>
+      </button>
+    </div>
+
+    <!-- Sessions -->
+    <div class="sidebar__nav" id="sidebar-nav">
+      <div class="sidebar__section-head">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M13.584 2.717a10.9 10.9 0 0 1 4.737 1.09 10.9 10.9 0 0 1 3.693 2.846 10.9 10.9 0 0 1 2.194 4.176.68.68 0 0 1-1.282.44 10.1 10.1 0 0 0-1.82-3.64c-.727-1-1.676-1.81-2.784-2.356a9.5 9.5 0 0 0-3.523-1.034 9.5 9.5 0 0 0-3.71.387 9.5 9.5 0 0 0-3.15 1.89H8.83a.68.68 0 0 1 0 1.358H4.754a.68.68 0 0 1-.68-.68V4.754a.68.68 0 0 1 1.36 0v1.641A10.9 10.9 0 0 1 13.584 2.717zM12.226 10.188v5.434h4.754a.68.68 0 0 0 0-1.359h-3.396v-4.075a.68.68 0 0 0-1.358 0z" fill="#F0F0F0"/></svg>
+        <span>Sessions</span>
+      </div>
+      <div class="sidebar__recent-list" id="session-list">
+        <div class="sidebar__empty">Upload a CSV to start</div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ========== MAIN ========== -->
+  <main class="main">
+
+    <!-- Welcome (visible when no messages) -->
+    <div id="welcome" class="welcome">
+      <div class="welcome__logo-wrap">
+        <div class="welcome__glow"></div>
+        <div class="welcome__logo welcome__logo--emoji">🤖</div>
+      </div>
+      <h1 class="welcome__title">Your ML Pipeline Co-Pilot</h1>
+      <p class="welcome__sub">Upload a CSV file and I'll help you clean, explore, train, and evaluate machine learning models — step by step.</p>
+
+      <div class="welcome__cards">
+        <button class="suggestion-card nebula-card" data-q="Load the dataset, show me basic info, and identify the target column">
+          <div class="suggestion-card__head">
+            <div class="suggestion-card__icon nebula-icon-bg"><svg width="25" height="25" viewBox="0 0 25 25" fill="none"><path d="M15.853 4.499a.58.58 0 0 0-1.142.074l-6.113 15.894a.58.58 0 0 0 1.142.074L15.853 4.5zM7.122 7.482a.58.58 0 0 0-.933.863L3.862 12.226l3.325 3.881a.58.58 0 0 0-.929.753L2.592 12.626a.58.58 0 0 1 0-.797l3.668-4.28a.58.58 0 0 1 .862-.067zM17.33 17.582a.58.58 0 0 0 .862.067l3.668-4.28a.58.58 0 0 0 0-.797l-3.668-4.28a.58.58 0 0 0-.929.754l3.328 3.88-3.328 3.88a.58.58 0 0 0 .067.776z" fill="#F0F0F0"/></svg></div>
+            <span>Explore Data</span>
+          </div>
+          <p>"Load the dataset and tell me about its shape, types, and target..."</p>
+        </button>
+        <button class="suggestion-card nebula-card" data-q="Clean the data: handle missing values, drop high cardinality, and encode categoricals">
+          <div class="suggestion-card__head">
+            <div class="suggestion-card__icon nebula-icon-bg"><svg width="25" height="25" viewBox="0 0 25 25" fill="none"><path d="M3.668 12.226a8.558 8.558 0 1 1 17.116 0 8.558 8.558 0 0 1-17.116 0zm8.558-9.78a9.78 9.78 0 1 0 0 19.561 9.78 9.78 0 0 0 0-19.56zM7.454 9.072l3.988 1.812a4.28 4.28 0 0 1 1.92 1.92l1.812 3.988 1.812-3.988a4.28 4.28 0 0 0-1.92-1.92L7.454 9.072z" fill="#F0F0F0"/></svg></div>
+            <span>Clean &amp; Prep</span>
+          </div>
+          <p>"Handle missing values, encode categoricals, and prepare for training..."</p>
+        </button>
+        <button class="suggestion-card nebula-card" data-q="Compare all available models and show me the best performer with evaluation plots">
+          <div class="suggestion-card__head">
+            <div class="suggestion-card__icon nebula-icon-bg"><svg width="25" height="25" viewBox="0 0 25 25" fill="none"><path d="M6.969 4.827a4.9 4.9 0 0 1 5.257-1.223 4.9 4.9 0 0 1 5.257 1.223l.153.767.496.099a4.3 4.3 0 0 1 3.652 3.234v.242a4.3 4.3 0 0 1-.984 2.488 4.9 4.9 0 0 1 1.74 3.456 4.9 4.9 0 0 1-3.118 4.772l-.045.226a5.6 5.6 0 0 1-9.72 0l-.045-.226A5.6 5.6 0 0 1 2.475 15.472a4.9 4.9 0 0 1 1.74-3.456A4.3 4.3 0 0 1 3.668 8.927v-.242a4.3 4.3 0 0 1 3.652-3.234l.496-.1.153-.524z" fill="#F0F0F0"/></svg></div>
+            <span>Train Models</span>
+          </div>
+          <p>"Compare classifiers, pick the best, and generate confusion matrix &amp; ROC..."</p>
+        </button>
+      </div>
+    </div>
+
+    <!-- Messages area -->
+    <div id="chat-area" class="chat-area" style="display:none;">
+      <div id="messages" class="messages"></div>
+      <!-- Typing indicator -->
+      <div id="typing" class="msg msg--ai" style="display:none;">
+        <div class="msg__avatar-wrap nebula-icon-bg">
+          <div class="msg__avatar-emoji">🤖</div>
+        </div>
+        <div class="msg__bubble nebula-card msg__bubble--ai">
+          <div class="typing-dots"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Files panel (collapsible) -->
+    <div id="files-panel" class="files-panel" style="display:none;">
+      <div class="files-panel__header">
+        <span>📁 Generated Files</span>
+        <button id="btn-toggle-files" class="files-panel__toggle">▼</button>
+      </div>
+      <div id="files-list" class="files-panel__list"></div>
+    </div>
+
+    <!-- Input -->
+    <div class="input-wrap">
+      <div class="input-box nebula-input">
+        <label for="file-input" id="btn-attach" class="btn-attach" title="Attach files">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+        </label>
+        <input type="file" id="file-input" accept=".csv" multiple style="display:none"/>
+
+        <textarea id="msg-input" placeholder="Ask ML Intern anything..." rows="1" disabled></textarea>
+        <button id="btn-send" class="btn-send nebula-gradient" disabled>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3.998 2.459a.58.58 0 0 1 .629-.07l17.465 8.733a.58.58 0 0 1 0 1.042L4.627 20.897a.58.58 0 0 1-.823-.671l2.29-8.583L3.804 3.061a.58.58 0 0 1 .194-.602zM7.142 12.226l-1.88 7.051 15.268-7.634L5.262 4.01l1.88 7.051h7.704a.58.58 0 1 1 0 1.165H7.142z" fill="#F0F0F0"/></svg>
+        </button>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="/app/app.js"></script>
+</body>
+</html>
